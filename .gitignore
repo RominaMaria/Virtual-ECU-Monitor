@@ -1,0 +1,22 @@
+# --- Compiled Binaries & Build Artifacts ---
+*.o
+*.exe
+*.out
+build/
+bin/
+
+# --- Python ---
+__pycache__/
+.pytest_cache/
+*.pyc
+venv/
+.env
+
+# --- IDEs & Editors ---
+.vscode/
+.idea/
+*.swp
+
+# --- System Files ---
+Thumbs.db
+.DS_Store
