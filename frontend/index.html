@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECU Diagnostic Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; }
+        .gauge { border: 5px solid #444; border-radius: 10px; padding: 20px; display: inline-block; margin-top: 50px; }
+        .status-ok { color: #00ff00; }
+        .status-err { color: #ff0000; }
+    </style>
+</head>
+<body>
+    <h1>Vehicle System Health</h1>
+    <div class="gauge">
+        <h2>Engine Temperature</h2>
+        <p id="temp-display">--.- °C</p>
+        <p id="status-display">Status: Loading...</p>
+    </div>
+
+    <script>
+        // This is the logic that "calls" your Python Web Server
+        async function updateDashboard() {
+            const response = await fetch('http://localhost:8000/sensor-data');
+            const data = await response.json();
+
+            // Update the HTML with the real data from C++
+            document.getElementById('temp-display').innerText = data.temperature + " °C";
+            
+            const statusEl = document.getElementById('status-display');
+            statusEl.innerText = "Status: " + data.status;
+            statusEl.className = data.status === "ERROR" ? "status-err" : "status-ok";
+        }
+
+        // Refresh data every 2 seconds
+        setInterval(updateDashboard, 2000);
+        updateDashboard();
+    </script>
+</body>
+</html>
