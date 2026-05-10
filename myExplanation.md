@@ -496,3 +496,83 @@ The "Manager" Role: Jenkins now sits at localhost:8081, acting as the supervisor
 Security: You unlocked it using the initialAdminPassword found via docker exec. (in power shell run docker exec jenkins_server cat /var/jenkins_home/secrets/initialAdminPassword)
 
 The Pipeline: Your project is now controlled by the Jenkinsfile, which acts as the "Master Recipe," telling Jenkins exactly when to build, deploy, and test.
+
+#### How to enter in the docker container ####
+In Power Shell we use this command:
+  docker exec -u 0 -it jenkins_server bash
+then the system will be as root like this:
+  root@703dd8a460e1:/#       this is called docker exc bash session
+we can create plugin folders inside the docker exc like this:
+  mkdir -p /usr/lib/docker/cli-plugins
+then we can download the Compose binary directly form the Docker official source:
+  curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o /usr/lib/docker/cli-plugins/docker-compose
+we make it executable:
+  chmod +x /usr/lib/docker/cli-plugins/docker-compose
+verify if it works:
+  docker compose version
+
+🤝 The Correlation: Why did we do this?
+By placing the file in cli-plugins, you are "teaching" the Docker command a new skill.
+
+Before: docker only knew how to handle single containers.
+
+After: When you type docker compose, the main Docker program looks in that specific folder, finds the new "manager" we just downloaded, and lets it handle your .yml file.
+
+
+#### add parameters in docker-compose.yml ####
+Adding there parameters we can use it after in our tests. we add the temp threslds then we used in the test_ecu.py
+🤝 The Correlation: Why this is "Advanced"
+By doing this, you have created a Configurable Test Environment.
+
+The YML is the "Dashboard" where you set the rules.
+
+The Python Test is the "Scale" that weighs the data against those rules.
+
+The Jenkins Build is the "Inspector" who runs the whole process.
+
+### Porpuse of Artifacts in CI/CD ###
+The main reaseon is to save the outut of a build and to check it later on retrive it to see in a later
+poit what happend
+
+## HTTP method by retrievig data from a backend ###
+GET
+
+## benefits of env variable in testing###
+Flexibility: run tests in diffrent modes (NORMAL/BROCKEN) without changing the code
+Security: keep credentials out of source code
+Portability:Adapt to diffrent environments 
+
+## Software in the Loop##
+A simulaton technique where the production software code is tested against a simulated environment on a host PC rather than real HW
+
+## Fault injection ##
+The deliberate introduction of errors into the system
+
+## Subprocess in Python ##
+is a tool used to run external commands or binarie and capture their output from within Python
+
+## Stadard Output stdout ###
+is the default stream where the program writes its output eg using printf in c or cout in c++ which can be capured by a testing scrpt
+
+## Role of header files .h in c or c++ integration
+They provide declaration of functions and variables acting as a 'contract' so diffrent source file can commuicate during compilation
+
+## Docker Compose
+is a tool for defining and running a multi-container Docker application using a single YAML configuration file
+
+## Python try/except block
+A safety structure used to catch and handle Exceptions during execution error preventing the entire program from crashing 
+
+## Fixed point arithmetic in embedded System
+Representing fractional numbers (eg storing 255 to represent 25.5C) to save memory and processing power
+
+## pytest fixtures
+A function that provides a fixed baseline for tests such as initaliying a database or starting a mock server
+
+### JSON comes form Java Script Object Notation
+
+## test Suite 
+a collection of test cases grouped together for a secific purpose eg a Smoke Suite a safety suite performance suite
+
+### Fast API
+A modern high performance web framework for building APIs with python used to bridge embedded logic with user interfaces

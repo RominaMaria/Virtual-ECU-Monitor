@@ -14,7 +14,7 @@ WORKDIR /app
 COPY . .
 
 # Install python dependecies
-RUN pip install --no-cache-dir fastapi uvicorn requests
+RUN pip install --no-cache-dir fastapi uvicorn requests pytest
 
 # Copile the ECU Monitor for Linux
 # We replace the .exe with a Linux binary named "ecu_monitor.bin"

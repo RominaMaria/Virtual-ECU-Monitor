@@ -1,49 +1,40 @@
 import os
 import subprocess
+import pytest
+
+# --- SEPARATE SAFETY FUNCTION ---
+def validate_temperature_range(temp):
+    """Business logic: Is this temperature safe for an engine?"""
+    if 0.0 <= temp <= 120.0:
+        print(f"Safety Check: PASS (Temp {temp}C is within safe range)")
+        return True
+    else:
+        print(f"Safety Check: FAIL (CRITICAL: Temp {temp}C out of bounds!)")
+        return False
 
 def run_ecu_validation():
-    # Detect environment: Docker/Linux vs Windows
     if os.name == 'nt':
         exe_path = "../../firmware/ecu_monitor.exe"
     else:
-        # Inside the Docker container, we are in /app
-        # The binary is at /app/firmware/ecu_monitor.bin
         exe_path = "firmware/ecu_monitor.bin"
     
-    print(f"--- Starting Validation on {exe_path} ---")
-
     try:
-        # 2. Execute the C++ program and "pipe" the output to Python
-        # capture_output=True grabs what std::cout printed
-        # text=True converts bytes to a Python string automatically
+        # 1. Run the live C++ code
         result = subprocess.run([exe_path], capture_output=True, text=True)
-        
-        # 3. Analyze the data (The "Logic" Layer)
         output = result.stdout
-        print("Captured Output:\n" + output)
-
-        # 4. Perform the "Assertions" (Testing if the system is safe)
-        # Change this part of your ecu_test.py:
-        if "ERROR DETECTED!" in output or "SYSTEM OK" in output:
-            print("Test Result: PASS (System status is valid)")
-        else:
-            print("Test Result: FAIL (Status unknown)")
-
-        # 5. Extract specific data
-        # We look for the temperature line and pull the number
+        
+        # 2. Extract live data
         for line in output.split('\n'):
             if "Temperature:" in line:
+                # Get the string '28.3 C' -> turn into float 28.3
                 temp_val = line.split(':')[1].strip()
-                print(f"Extracted Temperature for Log: {temp_val}")
                 temp_float = float(temp_val.replace('C', '').strip())
-                if 0.0 <= temp_float <= 120.0:
-                    print(f"Safety Check: PASS (Temp {temp_float} is within safe operating range)")
-                else:
-                    print(f"Safety Check: FAIL (CRITICAL: Temp {temp_float} out of bounds!)")
-            
-
-    except FileNotFoundError:
-        print("Error: Could not find ecu_monitor.exe. Did you compile it in the firmware folder?")
+                
+                # 3. PASS THE LIVE DATA to the separate function
+                validate_temperature_range(temp_float)
+                
+    except Exception as e:
+        print(f"Error during validation: {e}")
 
 if __name__ == "__main__":
     run_ecu_validation()
