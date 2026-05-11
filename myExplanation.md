@@ -576,3 +576,12 @@ a collection of test cases grouped together for a secific purpose eg a Smoke Sui
 
 ### Fast API
 A modern high performance web framework for building APIs with python used to bridge embedded logic with user interfaces
+
+
+### FIXTURES in PYTEST
+🤝 The Correlation: Why Rohde & Schwarz loves this
+In measurement and testing (their specialty), accuracy is everything. By using fixtures:
+
+  You ensure every test starts with the exact same environment.
+  You prevent "State Leaking" (where one test accidentally breaks the next one).
+  You make your code look like an Engineering Architecture, not just a script.
