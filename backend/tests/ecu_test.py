@@ -2,6 +2,7 @@ import os
 import subprocess
 import pytest
 
+
 # --- SEPARATE SAFETY FUNCTION ---
 def validate_temperature_range(temp):
     """Business logic: Is this temperature safe for an engine?"""

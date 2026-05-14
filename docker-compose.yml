@@ -10,3 +10,4 @@ services:
       - ECU_MODE=BROKEN
     volumes:
       - ./jenkins_artifacts:/app/output
+      - ./data:/app/data

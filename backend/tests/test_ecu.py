@@ -2,6 +2,7 @@ import pytest
 import os
 import subprocess
 import requests
+import sqlite3
 
 @pytest.fixture
 def ecu_limit():
@@ -44,3 +45,32 @@ def test_api_reports_sensor_error_when_broken():
     # CHANGE THIS: -999 / 10.0 is -99.9
     assert data["value"] == -99.9 
     assert "Out of physical bounds" in data["msg"]
+
+
+def test_database_record_exists():
+    # 1. Trigger the API
+    requests.get("http://localhost:8000/ecu-status")
+    db_path = "/app/backend/ecu_history.db"
+    # 2. Connect to the DB manually in the test to check it
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT count(*) FROM logs")
+    count = cursor.fetchone()[0]
+    conn.close()
+    
+    # 3. If the API worked, there should be at least 1 row
+    assert count > 0
+
+def test_data_integrity_binary_vs_db(raw_output):
+    temp_float = None
+
+    for line in raw_output.split('\n'):
+        if "Temperature:" in line:
+            temp_val = line.split(':')[1].strip()
+            temp_float = float(temp_val.replace('C', '').strip())
+            break
+    conn = sqlite3.connect("/app/backend/ecu_history.db")
+    last_entry = conn.execute("SELECT temp FROM logs ORDER BY timestamp DESC LIMIT 1").fetchone()[0]
+    conn.close()
+
+    assert last_entry == pytest.approx(temp_float), "Data Mismatch between Binary and Database!" 

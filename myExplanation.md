@@ -585,3 +585,60 @@ In measurement and testing (their specialty), accuracy is everything. By using f
   You ensure every test starts with the exact same environment.
   You prevent "State Leaking" (where one test accidentally breaks the next one).
   You make your code look like an Engineering Architecture, not just a script.
+
+
+
+### the patch and mock sequence in a test flow ###
+1. The Sequence: What happens first?
+When you use @patch, the order of execution is very specific. Imagine you are a theater director swapping an actor for a stunt double right before the curtain rises.
+
+The Patch (The Swap): Pytest sees the @patch('requests.get') decorator. Before the function even starts, it "hijacks" the real requests.get function and replaces it with a Mock object.
+
+The Injection: Pytest then looks at your function definition. Because you patched something, it injects that Mock object into your function as an argument (mock_get).
+
+The Programming: Inside the function, you tell the Mock how to behave (e.g., mock_get.return_value.status_code = 401).
+
+The Action: When your code calls requests.get(...), it is actually calling the patch (mock_get). It doesn't go to the internet; it stays inside your "fake" setup.
+
+The Verification: After the call, you use assert to check if the result matches what you programmed in step 3.
+
+## when a parameter in a function in needed ###
+2. When do you need a Parameter in the function?
+This is a common point of confusion. Here is the rule of thumb:
+
+Rule A: For Fixtures. If you have a @pytest.fixture (like raw_output or ecu_limit), you must put its name as a parameter in your test function. Pytest sees the name and "hands" you the data from that fixture.
+
+Rule B: For Mocks. When you use @patch, you must add a parameter to the function to "catch" the Mock object.
+
+Note: The name doesn't have to match exactly (you could call it m or fake_request), but it is standard to call it mock_get or mock_api.
+
+Rule C: Normal Functions. In your standard code (like validate_temperature_range(temp)), you need a parameter because that function is "hungry" for data to process.
+
+
+## interview question why is a param used in a test patch function ###
+💡 The "Pro" Tip for Stuttgart
+If they ask you: "Why do you use mock_get as a parameter?"
+Your Answer: "Because I'm using @patch, Pytest uses Dependency Injection to pass the Mock object into my test. This allows me to program the Mock's behavior locally within the test case without affecting the rest of the system".
+
+
+### How to enter in the database ###
+
+after this command:
+  docker exec -u 0 -it jenkins_server bash
+enter:
+  docker cp ecu_monitor_live:/app/backend/ecu_history.db ./temp_ecu.db && sqlite3 ./temp_ecu.db
+then
+  .tables
+then
+  .schema logs
+then 
+  .headers on
+then
+  .mode column
+then
+  SELECT * FROM logs ORDER BY timestamp DESC LIMIT 20;
+AND WILL APPEAR:
+  timestamp            temp   status
+-------------------  -----  ------------
+2026-05-14 12:17:10  -99.9  SENSOR ERROR
+2026-05-14 12:17:10  -99.9  SENSOR ERROR
