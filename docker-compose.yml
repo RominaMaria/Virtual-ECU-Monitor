@@ -8,6 +8,7 @@ services:
       - ECU_MODE=STRICT 
       - TEMP_THRESHOLDS=110.0
       - ECU_MODE=BROKEN
+      - ECU_MODE=SiMULATION
     volumes:
       - ./jenkins_artifacts:/app/output
       - ./data:/app/data

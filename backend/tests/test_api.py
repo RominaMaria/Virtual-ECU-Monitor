@@ -12,7 +12,7 @@ def test_api_mocked(mock_get):
 
 # 1. THE DECORATOR: "Swap the real requests.get for a Mock"
 @patch('requests.get')
-def test_api_unauthorized_access(mock_get): # 2. THE PARAMETER: Catch the Mock here
+def test_api_unauthorized_access(mock_get, base_url): # 2. THE PARAMETER: Catch the Mock here
     
     # 3. THE PROGRAMMING: Tell the Stunt Double (Mock) what to do
     # When someone calls you, return a status_code of 401
@@ -20,7 +20,7 @@ def test_api_unauthorized_access(mock_get): # 2. THE PARAMETER: Catch the Mock h
     
     # 4. THE ACTION: This call DOES NOT go to the web. 
     # It hits the 'mock_get' stunt double.
-    response = requests.get("http://localhost:8000/ecu-status")
+    response = requests.get(f"{base_url}/ecu-status")
     
     # 5. THE ASSERTION: Check if the logic handled the 401 correctly
     assert response.status_code == 401
