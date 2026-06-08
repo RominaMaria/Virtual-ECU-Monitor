@@ -22,7 +22,7 @@ RUN gcc -c firmware/src/sensor_logic.c -I firmware/include -o sensor_logic.o && 
     g++ firmware/src/main.cpp sensor_logic.o -I firmware/include -o firmware/ecu_monitor.bin
 
 # Expose the API port
-EXPOSE 8001
+EXPOSE 8000
 
 # Start the FastAPI server
 CMD ["uvicorn", "backend.main_api:app", "--host", "0.0.0.0", "--port", "8000"]
