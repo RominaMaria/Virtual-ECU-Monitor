@@ -20,7 +20,7 @@
     <script>
         // This is the logic that "calls" your Python Web Server
         async function updateDashboard() {
-            const response = await fetch('http://localhost:8000/sensor-data');
+            const response = await fetch('http://localhost:8001/sensor-data');
             const data = await response.json();
 
             // Update the HTML with the real data from C++

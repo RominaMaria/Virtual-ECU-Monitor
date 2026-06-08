@@ -14,7 +14,7 @@ docker run -d -p 8000:8000 --name ecu_monitor_live ecu-monitor-system
 echo [3/3] Opening Dashboard...
 timeout /t 3
 :: Open the API to check the JSON
-start http://localhost:8000/sensor-data
+start http://localhost:8001/sensor-data
 :: Open the Dashboard file
 start frontend/index.html
 

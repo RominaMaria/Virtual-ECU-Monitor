@@ -36,7 +36,7 @@ def test_ecu_status_valid():
 
 
 def test_api_reports_sensor_error_when_broken():
-    response = requests.get("http://localhost:8000/ecu-status")
+    response = requests.get("http://localhost:8001/ecu-status")
     data = response.json()
     
     assert response.status_code == 200

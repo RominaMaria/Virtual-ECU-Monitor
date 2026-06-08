@@ -414,7 +414,7 @@ C++ Linking (extern "C"): We ensured your main.cpp used extern "C" so the C++ co
 
 Python Logic: We added an if/else block to detect the OS. If it’s Linux (Docker), it now looks for ecu_monitor.bin instead of .exe.
 
-Frontend connectivity: We updated the index.html to point to localhost:8000/sensor-data, ensuring the dashboard can "talk" to the containerized API.
+Frontend connectivity: We updated the index.html to point to localhost:8001/sensor-data, ensuring the dashboard can "talk" to the containerized API.
 
 🐳 Phase 3: The Dockerfile Deep Dive
 The Dockerfile is the "DNA" of your project. Here is exactly what every line is doing:

@@ -1,9 +1,9 @@
 services:
   ecu-system:
     build: .
-    container_name: ecu_monitor_live
+    container_name: ecu_monitor_live_legacy
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - ECU_MODE=STRICT 
       - TEMP_THRESHOLDS=110.0

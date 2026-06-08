@@ -27,7 +27,7 @@ def test_api_unauthorized_access(mock_get, base_url): # 2. THE PARAMETER: Catch 
     print("Security Check: API correctly blocked unauthorized access.")
 
 """def test_api_response():
-    response = requests.get("http://localhost:8000/sensor-data")
+    response = requests.get("http://localhost:8001/sensor-data")
     if response.status_code == 200:
         data = response.json()
         print(f"API Check: PASS. Received: {data}")

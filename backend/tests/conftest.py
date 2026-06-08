@@ -5,7 +5,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--target-url", 
         action="store", 
-        default="http://localhost:8000", 
+        default="http://localhost:8001", 
         help="The base URL of the ECU API service under test"
     )
 
