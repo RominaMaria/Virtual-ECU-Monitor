@@ -484,7 +484,7 @@ API Integration Test (test_api.py): This uses the requests library to "ping" you
 4. Infrastructure Orchestration (launch.bat)
 To prevent "Ghost Containers" from haunting your system, we scripted the cleanup process.
 
-Automation Logic: Before a new build starts, the script automatically stops and removes the old ecu_monitor_live container.
+Automation Logic: Before a new build starts, the script automatically stops and removes the old ecu_monitor_live_legacy container.
 
 Path Management: We used %~dp0 to ensure that Jenkins (or you) can trigger the build from any folder without "File Not Found" errors.
 
@@ -626,7 +626,7 @@ Your Answer: "Because I'm using @patch, Pytest uses Dependency Injection to pass
 after this command:
   docker exec -u 0 -it jenkins_server bash
 enter:
-  docker cp ecu_monitor_live:/app/backend/ecu_history.db ./temp_ecu.db && sqlite3 ./temp_ecu.db
+  docker cp ecu_monitor_live_legacy:/app/backend/ecu_history.db ./temp_ecu.db && sqlite3 ./temp_ecu.db
 then
   .tables
 then

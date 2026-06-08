@@ -11,14 +11,14 @@ pipeline {
         stage('QA: Unit Testing') {
             steps {
                 echo 'Verifying ECU logic...'
-                sh 'docker exec ecu_monitor_live python3 backend/tests/ecu_test.py'
+                sh 'docker exec ecu_monitor_live_legacy python3 backend/tests/ecu_test.py'
             }
         }
         stage('QA: Integration Testing') {
             steps {
                 echo 'Checking API Connectivity...'
-                sh 'docker exec ecu_monitor_live pytest backend/tests/test_api.py -v --junitxml=api_results.xml'
-                sh 'docker cp ecu_monitor_live:/app/api_results.xml .'
+                sh 'docker exec ecu_monitor_live_legacy pytest backend/tests/test_api.py -v --junitxml=api_results.xml'
+                sh 'docker cp ecu_monitor_live_legacy:/app/api_results.xml .'
             }
             post {
                 always {
@@ -35,8 +35,8 @@ pipeline {
                         def currentM = modes[i]
                         
                         echo "--- Running Tests for Mode: ${currentM} ---"
-                        sh "docker exec -e ECU_MODE=${currentM} ecu_monitor_live pytest backend/tests/test_ecu.py -v --target-url=http://localhost:8001 --junitxml=${currentM}_results.xml"
-                        sh "docker cp ecu_monitor_live:/app/${currentM}_results.xml ."
+                        sh "docker exec -e ECU_MODE=${currentM} ecu_monitor_live_legacy pytest backend/tests/test_ecu.py -v --target-url=http://localhost:8001 --junitxml=${currentM}_results.xml"
+                        sh "docker cp ecu_monitor_live_legacy:/app/${currentM}_results.xml ."
                     }
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
                     junit '*_results.xml'
                     
                     // Pull the final SQLite DB state out of the container for analysis
-                    sh 'docker cp ecu_monitor_live:/app/backend/ecu_history.db .'
+                    sh 'docker cp ecu_monitor_live_legacy:/app/backend/ecu_history.db .'
                     archiveArtifacts artifacts: 'ecu_history.db, *.xml', allowEmptyArchive: true
                 }
             }
